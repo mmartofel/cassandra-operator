@@ -1,0 +1,46 @@
+﻿apiVersion: cassandra.datastax.com/v1beta1
+kind: CassandraDatacenter
+metadata:
+  name: cassandra-dc1
+  namespace: openshift-operators
+spec:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+  racks:
+    - name: rack1
+    - name: rack2
+    - name: rack3
+  storageConfig:
+    cassandraDataVolumeClaimSpec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: ssd-csi
+  managementApiAuth:
+    insecure: {}
+  clusterName: cluster1
+  config:
+    cassandra-yaml:
+      authenticator: PasswordAuthenticator
+      authorizer: CassandraAuthorizer
+      num_tokens: 16
+      role_manager: CassandraRoleManager
+    jvm-server-options:
+      initial_heap_size: 1G
+      max_heap_size: 1G
+  serverType: cassandra
+  serverVersion: 4.0.3
+  size: 3
+  canaryUpgradeCount: 0
+  # Use service account with anyuid alowance
+  serviceAccountName: cass-sa
+  # superuserSecretName: cluster1-superuser
+  # Allow multiple worker placement at one node if resources available
+  allowMultipleNodesPerWorker: true
