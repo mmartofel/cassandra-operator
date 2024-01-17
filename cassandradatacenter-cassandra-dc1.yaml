@@ -2,7 +2,7 @@
 kind: CassandraDatacenter
 metadata:
   name: cassandra-dc1
-  namespace: openshift-operators
+  namespace: mycassandra
 spec:
   resources:
     requests:
